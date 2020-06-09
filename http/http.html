@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./angular.min.js"></script>
+    <script src="./angular-route.min.js"></script>
+    <link rel="stylesheet" href="./bootstrap.min.css">
+</head>
+<body  ng-app="info"  ng-controller="infoCon">
+    <h1> <a href="#!/hunan">湖南</a>  </h1>
+
+    <h1>  <a href="#!/jiangxi">江西</a></h1>
+
+    <div  ng-view>
+       
+    </div>
+    <h1>{{info}}</h1>
+            <script>
+                // angularjS来发送请求
+                // 上次课讲的路由
+                //三个控制器
+                // 总控制器
+                //      |
+                 //  -湖南分控制器
+                //   |
+                 //  -江西分控制器
+                   // 这三个 控制器中变量的作用范围
+                   //  总> huna == jiangxi
+/**
+    返回的响应对象(r)中包含的属性
+data：字符串或对象。
+status：数值，响应的http状态码。
+headers：函数，响应头的getter函数。
+config：对象，用于生成请求的配置对象。
+statusText：字符串，响应的HTTP状态文本。
+
+    jsonp?   跨域访问   servelt + jsp  都在同一个应用程序下
+
+    vue 构建前端   
+    java/nodeJS 构建后端  
+    
+    前后端分离
+*/
+
+angular.module('info',['ngRoute']
+).controller(
+        // 总控 
+    'infoCon' ,function($scope,$http){
+        $scope.info="总控制器"; //这是全局变量
+        console.log("info...")
+       
+
+    }          
+).controller(
+        // 湖南 
+     'hunanCon' ,function($scope,$http){
+        console.log("hunan...")
+           // 最简单的发送get请求
+        //    $http.get("http://127.0.0.1:8080/data.json",null).then(
+        //     (r)=>{
+        //         // 读取响应的数据
+        //         $scope.info=r.data.rows;
+        //         console.log($scope.info)
+        //     },  // 请求成功的回调函数
+        //     (r)=>{}   // 请求失败的回调函数
+        //     )
+
+        // 传统的方式
+            $http({
+                method:'get',
+                url:"http://127.0.0.1:8080/data.json",
+            }).then((r)=>{
+                console.log(r.data)
+            },(r)=>{})
+     }          
+).controller(
+        // 江西
+     'jiangxiCon',function($scope){
+        console.log("jiangxi...")
+     } 
+).config(function($routeProvider){
+    $routeProvider
+        .when('/hunan',{
+            templateUrl:'hunan.html'
+            
+            })
+        .when('/jiangxi',{
+            templateUrl:'jiangxi.html'
+         //   controller:'jiangxiCon'   // 这段代码是默认引用一次控制器
+            })
+})
+ 
+
+            </script>
+</body>
+</html>
